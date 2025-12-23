@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swipeable Cards</title>
+  <style>
+    :root {
+      --card-perspective: 700px;
+      --card-z-offset: 12px;
+      --card-y-offset: 7px;
+      --card-max-z-index: 100;
+      --card-swap-duration: 0.3s;
+      --swipe-x: 0px;
+      --swipe-rotate: 0deg;
+    }
+
+    *,
+    *::after,
+    *::before {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 1rem;
+      font-family: "Inter", "Helvetica", system-ui, sans-serif;
+      min-block-size: 100vh;
+      overflow-x: clip;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(45deg, #293457, #7c8dc3);
+    }
+
+    .layout {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 3rem;
+      justify-content: center;
+      gap: 1.25rem;  
+    }
+
+    .card-stack {
+      width: 21.6rem;
+      height: 26.4rem;
+      position: relative;
+      display: grid;
+      grid-auto-flow: column;
+      place-content: center;
+      user-select: none;
+      touch-action: none;
+      transform-style: preserve-3d;
+    }
+
+    .card {
+      cursor: grab;
+      background-color: #eee;
+      display: flex;
+      place-self: center;
+      position: absolute;
+      width: calc(100% - 2rem);
+      height: calc(100% - 2rem);
+      border: 1px solid #fff;
+      z-index: calc(var(--card-max-z-index) - var(--i));
+      transform: perspective(var(--card-perspective))
+        translateZ(calc(-1 * var(--card-z-offset) * var(--i)))
+        translateY(calc(var(--card-y-offset) * var(--i)))
+        translateX(var(--swipe-x, 0px)) rotateY(var(--swipe-rotate, 0deg));
+      transition: transform var(--card-swap-duration) ease;
+      will-change: transform;
+      backface-visibility: hidden;
+      box-shadow: 0 2px 2px #00000061;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 0.75rem;
+    }
+
+    .card:active {
+      cursor: grabbing;
+    }
+
+    .card-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
+    .card-content img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: auto;
+      border-radius: 0.75rem;
+      pointer-events: none;
+      user-select: none;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    .audio-toggle {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+    }
+
+    .audio-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .audio-toggle::before {
+      content: '🔊';
+    }
+
+    .audio-toggle.muted::before {
+      content: '🔇';
+    }
+
+    .greeting {
+      color: #fff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.2rem;
+      font-weight: 750;
+      text-align: center;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      padding: 0 1rem;
+    }
+
+    .card.text {
+      transform:
+        translateY(calc(var(--card-y-offset) * var(--i)))
+        translateX(var(--swipe-x, 0px));
+    }
+
+  </style>
+</head>
+<body>
+  <div class="layout">
+  
+    <!-- YOUR CARD STACK HTML HERE -->
+    <div class="greeting">Hi Pau! Swipe the cards left or right</div>
+
+    <div class="card-stack">
+      <article class="card text" style="--i: 0">
+        <div class="card-content">
+          <img src="images/Image-2.svg" alt="" />
+        </div>
+      </article>
+
+      <article class="card text" style="--i: 1">
+        <div class="card-content">
+          <img src="images/Image-3.svg" alt="" />
+        </div>
+      </article>
+
+      <article class="card text" style="--i: 2;">
+        <div class="card-content">
+          <img src="images/Image-4.svg" alt="" />
+        </div>
+      </article>
+
+      <article class="card text" style="--i: 3;">
+        <div class="card-content">
+          <img src="images/Image-5.svg" alt="" />
+        </div>
+      </article>
+
+      <article class="card text" style="--i: 4;">
+        <div class="card-content">
+          <img src="images/Image-6.svg" alt="" />
+        </div>
+      </article>
+
+      <article class="card text" style="--i: 5">
+        <div class="card-content">
+          <img src="images/Image-7.svg" alt="" />
+        </div>
+      </article>
+
+      <article class="card text" style="--i: 6">
+        <div class="card-content">
+          <img src="images/Image-8.svg" alt="" />
+        </div>
+      </article>
+
+    
+    </div>
+
+    <div class="audio-toggle muted"></div>
+    
+    <audio id="bgMusic" loop>
+      <source src="audio\tsunami.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const cardStack = document.querySelector(".card-stack");
+        let cards = [...document.querySelectorAll(".card")];
+        let isSwiping = false;
+        let startX = 0;
+        let currentX = 0;
+        let animationFrameId = null;
+        let hasInteracted = false;
+        const audio = document.getElementById('bgMusic');
+        const audioToggle = document.querySelector('.audio-toggle');
+
+        const getDurationFromCSS = (
+          variableName,
+          element = document.documentElement
+        ) => {
+          const value = getComputedStyle(element)
+            ?.getPropertyValue(variableName)
+            ?.trim();
+          if (!value) return 0;
+          if (value.endsWith("ms")) return parseFloat(value);
+          if (value.endsWith("s")) return parseFloat(value) * 1000;
+          return parseFloat(value) || 0;
+        };
+
+        const getActiveCard = () => cards[0];
+
+        const updatePositions = () => {
+          cards.forEach((card, i) => {
+            card.style.setProperty("--i", i + 1);
+            card.style.setProperty("--swipe-x", "0px");
+            card.style.setProperty("--swipe-rotate", "0deg");
+            card.style.opacity = "1";
+          });
+        };
+
+        const applySwipeStyles = (deltaX) => {
+          const card = getActiveCard();
+          if (!card) return;
+          card.style.setProperty("--swipe-x", `${deltaX}px`);
+          card.style.setProperty("--swipe-rotate", `${deltaX * 0.2}deg`);
+          card.style.opacity = 1 - Math.min(Math.abs(deltaX) / 100, 1) * 0.75;
+        };
+
+        const handleStart = (clientX) => {
+          if (isSwiping) return;
+          isSwiping = true;
+          startX = currentX = clientX;
+          const card = getActiveCard();
+          card && (card.style.transition = "none");
+
+          if (!hasInteracted) {
+              hasInteracted = true;
+              audio.play().catch(() => {});
+              audioToggle.classList.remove('muted');
+      }
+        };
+
+        const handleMove = (clientX) => {
+          if (!isSwiping) return;
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = requestAnimationFrame(() => {
+            currentX = clientX;
+            const deltaX = currentX - startX;
+            applySwipeStyles(deltaX);
+
+            if (Math.abs(deltaX) > 50) handleEnd();
+          });
+        };
+
+        const handleEnd = () => {
+          if (!isSwiping) return;
+          cancelAnimationFrame(animationFrameId);
+
+          const deltaX = currentX - startX;
+          const threshold = 50;
+          const duration = getDurationFromCSS("--card-swap-duration");
+          const card = getActiveCard();
+
+          if (card) {
+            card.style.transition = `transform ${duration}ms ease, opacity ${duration}ms ease`;
+
+            if (Math.abs(deltaX) > threshold) {
+              const direction = Math.sign(deltaX);
+
+              card.style.setProperty("--swipe-x", `${direction * 300}px`);
+              card.style.setProperty("--swipe-rotate", `${direction * 20}deg`);
+
+              setTimeout(() => {
+                card.style.setProperty("--swipe-rotate", `${-direction * 20}deg`);
+              }, duration * 0.5);
+
+              setTimeout(() => {
+                cards = [...cards.slice(1), card];
+                updatePositions();
+              }, duration);
+            } else {
+              applySwipeStyles(0);
+            }
+          }
+
+          isSwiping = false;
+          startX = currentX = 0;
+        };
+
+        const addEventListeners = () => {
+          cardStack?.addEventListener("pointerdown", ({ clientX }) =>
+            handleStart(clientX)
+          );
+          cardStack?.addEventListener("pointermove", ({ clientX }) =>
+            handleMove(clientX)
+          );
+          cardStack?.addEventListener("pointerup", handleEnd);
+        };
+
+        updatePositions();
+        addEventListeners();
+
+        audioToggle?.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play();
+            audioToggle.classList.remove('muted');
+        } else {
+            audio.pause();
+            audioToggle.classList.add('muted');
+        }
+        });
+      });
+
+    </script>
+  </div>
+</body>
+</html>
